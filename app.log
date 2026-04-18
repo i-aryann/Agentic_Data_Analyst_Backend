@@ -1,0 +1,272 @@
+2026-04-18 08:13:00,594 [INFO] ==================================================
+2026-04-18 08:13:00,596 [INFO] 🎯 NEW ANALYSIS REQUEST RECEIVED!
+2026-04-18 08:13:00,597 [INFO] 💬 Query: best ROI car
+2026-04-18 08:13:00,597 [INFO] 🧠 Session ID: sess_1g0v3mebrmo3q4yq0
+2026-04-18 08:13:00,598 [INFO] ==================================================
+2026-04-18 08:13:03,408 [INFO] Started server process [23120]
+2026-04-18 08:13:03,409 [INFO] Waiting for application startup.
+2026-04-18 08:13:03,410 [INFO] Application startup complete.
+2026-04-18 08:18:01,582 [INFO] Shutting down
+2026-04-18 08:18:01,690 [INFO] Waiting for application shutdown.
+2026-04-18 08:18:01,691 [INFO] Application shutdown complete.
+2026-04-18 08:18:01,692 [INFO] Finished server process [23120]
+2026-04-18 08:18:03,524 [INFO] Started server process [24380]
+2026-04-18 08:18:03,526 [INFO] Waiting for application startup.
+2026-04-18 08:18:03,527 [INFO] Application startup complete.
+2026-04-18 08:21:09,259 [INFO] 127.0.0.1:59152 - "OPTIONS /api/process HTTP/1.1" 200
+2026-04-18 08:21:09,654 [INFO] 127.0.0.1:59152 - "POST /api/process HTTP/1.1" 200
+2026-04-18 08:21:36,113 [INFO] 127.0.0.1:60010 - "OPTIONS /api/analyze HTTP/1.1" 200
+2026-04-18 08:21:36,117 [INFO] ==================================================
+2026-04-18 08:21:36,118 [INFO] 🎯 NEW ANALYSIS REQUEST RECEIVED!
+2026-04-18 08:21:36,118 [INFO] 💬 Query: what is the best ROI car based on mileage and power
+2026-04-18 08:21:36,118 [INFO] 🧠 Session ID: sess_1g0v3mebrmo3q4yq0
+2026-04-18 08:21:36,119 [INFO] 📁 File ID: ae0c260d-296c-4a7a-848c-ec8bba8d3a9c
+2026-04-18 08:21:36,119 [INFO] ==================================================
+2026-04-18 08:21:36,120 [INFO] 127.0.0.1:60010 - "POST /api/analyze HTTP/1.1" 200
+2026-04-18 09:57:40,038 [INFO] 127.0.0.1:64069 - "OPTIONS /api/analyze HTTP/1.1" 200
+2026-04-18 09:57:40,043 [INFO] ==================================================
+2026-04-18 09:57:40,043 [INFO] 🎯 NEW ANALYSIS REQUEST RECEIVED!
+2026-04-18 09:57:40,044 [INFO] 💬 Query: what is the best ROI car based on mileage and power
+2026-04-18 09:57:40,045 [INFO] 🧠 Session ID: sess_1g0v3mebrmo3q4yq0
+2026-04-18 09:57:40,045 [INFO] 📁 File ID: ae0c260d-296c-4a7a-848c-ec8bba8d3a9c
+2026-04-18 09:57:40,046 [INFO] ==================================================
+2026-04-18 09:57:40,046 [INFO] Found 2 previous interactions for memory context.
+2026-04-18 09:57:40,047 [INFO] 127.0.0.1:64069 - "POST /api/analyze HTTP/1.1" 200
+2026-04-18 10:45:27,193 [INFO] Shutting down
+2026-04-18 10:45:27,316 [INFO] Waiting for application shutdown.
+2026-04-18 10:45:27,321 [INFO] Application shutdown complete.
+2026-04-18 10:45:27,321 [INFO] Finished server process [24380]
+2026-04-18 10:45:37,903 [INFO] Started server process [4420]
+2026-04-18 10:45:37,904 [INFO] Waiting for application startup.
+2026-04-18 10:45:37,905 [INFO] Application startup complete.
+2026-04-18 10:46:50,121 [INFO] 127.0.0.1:51732 - "OPTIONS /api/process HTTP/1.1" 200
+2026-04-18 10:46:50,515 [INFO] 127.0.0.1:51732 - "POST /api/process HTTP/1.1" 200
+2026-04-18 10:47:17,712 [INFO] 127.0.0.1:51937 - "OPTIONS /api/analyze HTTP/1.1" 200
+2026-04-18 10:47:17,715 [INFO] ==================================================
+2026-04-18 10:47:17,716 [INFO] 🎯 NEW ANALYSIS REQUEST RECEIVED!
+2026-04-18 10:47:17,716 [INFO] 💬 Query: give me a general analysis of this used car price dataset
+2026-04-18 10:47:17,717 [INFO] 🧠 Session ID: sess_1g0v3mebrmo3q4yq0
+2026-04-18 10:47:17,717 [INFO] 📁 File ID: ae0c260d-296c-4a7a-848c-ec8bba8d3a9c
+2026-04-18 10:47:17,718 [INFO] ==================================================
+2026-04-18 10:47:17,718 [INFO] 🚀 Invoking LangGraph analysis pipeline...
+2026-04-18 10:47:19,850 [ERROR] ❌ Graph execution failed: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+Traceback (most recent call last):
+  File "E:\Projects\Agentic Data Analyst\backend\main.py", line 249, in analyze_data
+    final_state = analysis_graph.invoke(initial_state)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\main.py", line 3071, in invoke
+    for chunk in self.stream(
+                 ~~~~~~~~~~~^
+        input,
+        ^^^^^^
+    ...<10 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\main.py", line 2646, in stream
+    for _ in runner.tick(
+             ~~~~~~~~~~~^
+        [t for t in loop.tasks.values() if not t.writes],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        schedule_task=loop.accept_push,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    ~~~~~~~~~~~~~~^
+        t,
+        ^^
+    ...<10 lines>...
+        },
+        ^^
+    )
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\_internal\_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+  File "E:\Projects\Agentic Data Analyst\backend\agents\planner.py", line 52, in planner_node
+    response = llm.invoke(messages)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 455, in invoke
+    self.generate_prompt(
+    ~~~~~~~~~~~~~~~~~~~~^
+        [self._convert_input(input)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ).generations[0][0],
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1198, in generate_prompt
+    return self.generate(prompt_messages, stop=stop, callbacks=callbacks, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1005, in generate
+    self._generate_with_cache(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        m,
+        ^^
+    ...<2 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1310, in _generate_with_cache
+    result = self._generate(
+        messages, stop=stop, run_manager=run_manager, **kwargs
+    )
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_groq\chat_models.py", line 621, in _generate
+    response = self.client.create(messages=message_dicts, **params)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\groq\resources\chat\completions.py", line 461, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/openai/v1/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<45 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\groq\_base_client.py", line 1242, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\groq\_base_client.py", line 1044, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.AuthenticationError: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+During task with name 'planner' and id 'c4a33327-4e96-f2cf-9612-fe9d10f89ab2'
+2026-04-18 10:47:19,873 [INFO] 127.0.0.1:51937 - "POST /api/analyze HTTP/1.1" 200
+2026-04-18 12:38:34,504 [INFO] 127.0.0.1:63477 - "OPTIONS /api/process HTTP/1.1" 200
+2026-04-18 12:38:34,820 [INFO] 127.0.0.1:63477 - "POST /api/process HTTP/1.1" 200
+2026-04-18 12:39:14,605 [INFO] 127.0.0.1:57665 - "OPTIONS /api/analyze HTTP/1.1" 200
+2026-04-18 12:39:14,608 [INFO] ==================================================
+2026-04-18 12:39:14,609 [INFO] 🎯 NEW ANALYSIS REQUEST RECEIVED!
+2026-04-18 12:39:14,609 [INFO] 💬 Query: What are the best cars in terms of ROI considering power and mileage
+2026-04-18 12:39:14,609 [INFO] 🧠 Session ID: sess_1g0v3mebrmo3q4yq0
+2026-04-18 12:39:14,610 [INFO] 📁 File ID: ae0c260d-296c-4a7a-848c-ec8bba8d3a9c
+2026-04-18 12:39:14,610 [INFO] ==================================================
+2026-04-18 12:39:14,611 [INFO] Found 1 previous interactions for memory context.
+2026-04-18 12:39:14,611 [INFO] 🚀 Invoking LangGraph analysis pipeline...
+2026-04-18 12:39:14,927 [ERROR] ❌ Graph execution failed: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+Traceback (most recent call last):
+  File "E:\Projects\Agentic Data Analyst\backend\main.py", line 249, in analyze_data
+    final_state = analysis_graph.invoke(initial_state)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\main.py", line 3071, in invoke
+    for chunk in self.stream(
+                 ~~~~~~~~~~~^
+        input,
+        ^^^^^^
+    ...<10 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\main.py", line 2646, in stream
+    for _ in runner.tick(
+             ~~~~~~~~~~~^
+        [t for t in loop.tasks.values() if not t.writes],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        schedule_task=loop.accept_push,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\_runner.py", line 167, in tick
+    run_with_retry(
+    ~~~~~~~~~~~~~~^
+        t,
+        ^^
+    ...<10 lines>...
+        },
+        ^^
+    )
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\pregel\_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\_internal\_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langgraph\_internal\_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+  File "E:\Projects\Agentic Data Analyst\backend\agents\planner.py", line 52, in planner_node
+    response = llm.invoke(messages)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 455, in invoke
+    self.generate_prompt(
+    ~~~~~~~~~~~~~~~~~~~~^
+        [self._convert_input(input)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ).generations[0][0],
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1198, in generate_prompt
+    return self.generate(prompt_messages, stop=stop, callbacks=callbacks, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1005, in generate
+    self._generate_with_cache(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        m,
+        ^^
+    ...<2 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1310, in _generate_with_cache
+    result = self._generate(
+        messages, stop=stop, run_manager=run_manager, **kwargs
+    )
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\langchain_groq\chat_models.py", line 621, in _generate
+    response = self.client.create(messages=message_dicts, **params)
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\groq\resources\chat\completions.py", line 461, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/openai/v1/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<45 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\groq\_base_client.py", line 1242, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\groq\_base_client.py", line 1044, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.AuthenticationError: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+During task with name 'planner' and id 'cee079dd-0be8-980f-5ab1-8a8633bab837'
+2026-04-18 12:39:14,938 [INFO] 127.0.0.1:57665 - "POST /api/analyze HTTP/1.1" 200
+2026-04-18 12:40:23,894 [INFO] Shutting down
+2026-04-18 12:40:24,003 [INFO] Finished server process [4420]
+2026-04-18 12:40:24,030 [ERROR] Traceback (most recent call last):
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 741, in lifespan
+    await receive()
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aryan\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+2026-04-18 12:40:38,798 [INFO] Started server process [17092]
+2026-04-18 12:40:38,799 [INFO] Waiting for application startup.
+2026-04-18 12:40:38,799 [INFO] Application startup complete.
+2026-04-18 12:40:58,670 [INFO] 127.0.0.1:50754 - "POST /api/upload HTTP/1.1" 200
+2026-04-18 12:41:01,945 [INFO] 127.0.0.1:50754 - "POST /api/process HTTP/1.1" 200
+2026-04-18 12:41:34,977 [INFO] ==================================================
+2026-04-18 12:41:34,978 [INFO] 🎯 NEW ANALYSIS REQUEST RECEIVED!
+2026-04-18 12:41:34,978 [INFO] 💬 Query: What are the best 5 cars in terms on ROI considering mileage and power
+2026-04-18 12:41:34,979 [INFO] 🧠 Session ID: sess_1g0v3mebrmo3q4yq0
+2026-04-18 12:41:34,979 [INFO] 📁 File ID: 0bee7e7c-1a2f-4bc2-ab21-2a51af6edbb6
+2026-04-18 12:41:34,980 [INFO] ==================================================
+2026-04-18 12:41:34,980 [INFO] 🚀 Invoking LangGraph analysis pipeline...
+2026-04-18 12:41:46,676 [INFO] ✅ Analysis complete. ID: A-223585
+2026-04-18 12:41:46,677 [INFO] 127.0.0.1:60228 - "POST /api/analyze HTTP/1.1" 200
+2026-04-18 12:44:59,914 [INFO] Shutting down
+2026-04-18 12:45:00,023 [INFO] Waiting for application shutdown.
+2026-04-18 12:45:00,024 [INFO] Application shutdown complete.
+2026-04-18 12:45:00,024 [INFO] Finished server process [17092]

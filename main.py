@@ -1,13 +1,35 @@
 from fastapi import FastAPI, APIRouter, UploadFile, File, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 import pandas as pd
 import io
 import os
 import uuid
 import json
+import logging
+
+from dotenv import load_dotenv
+load_dotenv()
+
+# Set up the formatter and file handler for all backend logs
+file_handler = logging.FileHandler("app.log", encoding="utf-8")
+file_handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
+
+# Configure our main logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    # Adding a StreamHandler so we get formatted logs in the console too
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+# Capture Uvicorn's internal logs (access and errors) into our file as well
+logging.getLogger("uvicorn.access").addHandler(file_handler)
+logging.getLogger("uvicorn.error").addHandler(file_handler)
 
 app = FastAPI()
 
@@ -30,7 +52,10 @@ def infer_column_type(series):
     if pd.api.types.is_datetime64_any_dtype(series):
         return "datetime"
     try:
-        pd.to_datetime(series.dropna().head(5))
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            pd.to_datetime(series.dropna().head(5))
         return "datetime"
     except Exception:
         pass
@@ -88,12 +113,12 @@ async def upload_dataset(file: UploadFile = File(...)):
 
 class ProcessRequest(BaseModel):
     file_id: str
-    schema: Dict[str, str]
+    user_schema: Dict[str, str]
 
 @api_router.post("/process")
 async def process_dataset(request: ProcessRequest):
     file_id = request.file_id
-    user_schema = request.schema
+    user_schema = request.user_schema
     
     meta_path = os.path.join(UPLOAD_DIR, f"{file_id}_meta.json")
     if not os.path.exists(meta_path):
@@ -136,36 +161,131 @@ async def process_dataset(request: ProcessRequest):
 
 
 # -----------------------------------------------------
-# Stubs for existing frontend operations
+# In-Memory Storage for Chat / LLM Context
+# (We will replace this with Mem0 later for persistent storage)
 # -----------------------------------------------------
+chat_memory: Dict[str, List[Dict[str, Any]]] = {}
+
+def add_to_memory(session_id: str, role: str, content: str, metadata: dict = None):
+    """
+    Saves a message to the local memory array.
+    When migrating to Mem0, this function will call the Mem0 client add() method.
+    """
+    if session_id not in chat_memory:
+        chat_memory[session_id] = []
+        
+    chat_memory[session_id].append({
+        "role": role, # 'user' or 'assistant'
+        "content": content,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "metadata": metadata or {}
+    })
+
+def get_memory(session_id: str) -> List[Dict[str, Any]]:
+    """
+    Retrieves the memory history for a session.
+    When migrating to Mem0, this will call the Mem0 client search() or history() method.
+    """
+    return chat_memory.get(session_id, [])
+
+# -----------------------------------------------------
+# -----------------------------------------------------
+# Agentic Analysis Pipeline (LangGraph Phase 1)
+# -----------------------------------------------------
+from agents.graph import analysis_graph
 
 class AnalyzeRequest(BaseModel):
     query: str
+    session_id: str = "default"
+    file_id: Optional[str] = None
 
 @api_router.post("/analyze")
 async def analyze_data(request: AnalyzeRequest):
-    aid = f"A-{str(uuid.uuid4())[:6]}"
+    logger.info("=" * 50)
+    logger.info("🎯 NEW ANALYSIS REQUEST RECEIVED!")
+    logger.info(f"💬 Query: {request.query}")
+    logger.info(f"🧠 Session ID: {request.session_id}")
+    logger.info(f"📁 File ID: {request.file_id}")
+    logger.info("=" * 50)
 
-    result = {
-        "summary": {
-            "title": "APAC Market expansion showing 24% higher velocity than forecasted.",
-            "description": "...",
-            "primary_driver": "Cloud Adoption",
-            "impact_score": 8.4,
-            "confidence": 94
-        },
-        "insights": [],
-        "charts": [],
-        "hypotheses": [],
-        "filters": {
-            "regions": ["APAC", "North America", "Europe", "Latin America"],
-            "categories": ["Enterprise", "Mid-Market", "SMB"],
-            "date_ranges": ["Last 7 Days", "Last 30 Days", "Last 90 Days", "Custom"]
-        },
-        "analysis_id": aid
+    # Validate that a file_id was provided
+    if not request.file_id:
+        raise HTTPException(
+            status_code=400,
+            detail="No dataset selected. Please upload and process a dataset first.",
+        )
+
+    # Resolve the processed CSV path
+    file_path = os.path.join(PROCESSED_DIR, f"{request.file_id}.csv")
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=404,
+            detail=f"Processed dataset not found for file_id '{request.file_id}'. "
+                   "Please confirm & process your dataset from the Data Source page.",
+        )
+
+    # Retrieve memory context
+    memory = get_memory(request.session_id)
+    if memory:
+        logger.info(f"Found {len(memory)} previous interactions for memory context.")
+
+    # Save the user query to memory
+    add_to_memory(request.session_id, "user", request.query)
+
+    # Build the initial state for the graph
+    initial_state = {
+        "query": request.query,
+        "file_id": request.file_id,
+        "file_path": os.path.abspath(file_path),
+        "session_id": request.session_id,
+        "memory": memory,
+        "retry_count": 0,
     }
 
-    return result
+    logger.info("🚀 Invoking LangGraph analysis pipeline...")
+
+    try:
+        # Run the compiled LangGraph
+        final_state = analysis_graph.invoke(initial_state)
+
+        result = final_state.get("final_response", {})
+
+        # Save the response to memory
+        add_to_memory(
+            request.session_id,
+            "assistant",
+            json.dumps(result, default=str)[:500],  # Truncate for memory
+            metadata={"analysis_id": result.get("analysis_id", "unknown")},
+        )
+
+        logger.info(f"✅ Analysis complete. ID: {result.get('analysis_id')}")
+        return result
+
+    except Exception as e:
+        logger.error(f"❌ Graph execution failed: {e}", exc_info=True)
+        # Return a graceful error response instead of crashing
+        aid = f"A-{str(uuid.uuid4())[:6]}"
+        return {
+            "summary": {
+                "title": "Analysis Error",
+                "description": f"An unexpected error occurred: {str(e)[:200]}",
+                "primary_driver": "System Error",
+                "impact_score": 0,
+                "confidence": 0,
+            },
+            "insights": [],
+            "charts": [],
+            "hypotheses": [],
+            "filters": {},
+            "analysis_id": aid,
+        }
+
+@api_router.get("/memory/{session_id}")
+async def fetch_memory(session_id: str):
+    """
+    API endpoint to inspect current memory for debugging.
+    """
+    return {"session_id": session_id, "history": get_memory(session_id)}
 
 @api_router.get("/analysis/{analysis_id}")
 async def get_analysis(analysis_id: str):
