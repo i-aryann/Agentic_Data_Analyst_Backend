@@ -43,28 +43,35 @@ app.add_middleware(
 
 UPLOAD_DIR = "uploads"
 PROCESSED_DIR = "processed"
+ANALYSES_DIR = "analyses"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(PROCESSED_DIR, exist_ok=True)
+os.makedirs(ANALYSES_DIR, exist_ok=True)
 
 api_router = APIRouter(prefix="/api")
 
 def infer_column_type(series):
-    if pd.api.types.is_datetime64_any_dtype(series):
-        return "datetime"
-    try:
-        import warnings
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            pd.to_datetime(series.dropna().head(5))
-        return "datetime"
-    except Exception:
-        pass
     if pd.api.types.is_float_dtype(series):
         return "float"
     if pd.api.types.is_integer_dtype(series):
         return "integer"
     if pd.api.types.is_bool_dtype(series):
         return "boolean"
+        
+    if pd.api.types.is_datetime64_any_dtype(series):
+        return "datetime"
+        
+    if pd.api.types.is_object_dtype(series):
+        try:
+            import warnings
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                # strict pd.to_datetime to avoid catching numbers in strings
+                pd.to_datetime(series.dropna().head(5))
+            return "datetime"
+        except Exception:
+            pass
+            
     return "string"
 
 @api_router.post("/upload")
@@ -157,6 +164,7 @@ async def process_dataset(request: ProcessRequest):
         
         return {"status": "success", "message": "Dataset processed and typed successfully", "rows_processed": len(df)}
     except Exception as e:
+        logger.error(f"❌ Error during /process: {e}", exc_info=True)
         raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
 
 
@@ -250,6 +258,16 @@ async def analyze_data(request: AnalyzeRequest):
 
         result = final_state.get("final_response", {})
 
+        # Inject metadata for history
+        result["query"] = request.query
+        result["created_at"] = datetime.now(timezone.utc).isoformat()
+        
+        # Save to local disk for history
+        aid = result.get("analysis_id", f"A-{str(uuid.uuid4())[:6]}")
+        result["analysis_id"] = aid
+        with open(os.path.join(ANALYSES_DIR, f"{aid}.json"), "w", encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+
         # Save the response to memory
         add_to_memory(
             request.session_id,
@@ -289,11 +307,36 @@ async def fetch_memory(session_id: str):
 
 @api_router.get("/analysis/{analysis_id}")
 async def get_analysis(analysis_id: str):
-    return {"error": "Stub method"}
+    file_path = os.path.join(ANALYSES_DIR, f"{analysis_id}.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Analysis not found")
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 @api_router.get("/analyses")
 async def list_analyses():
-    return []
+    analyses = []
+    if not os.path.exists(ANALYSES_DIR):
+        return analyses
+        
+    for filename in os.listdir(ANALYSES_DIR):
+        if filename.endswith(".json"):
+            file_path = os.path.join(ANALYSES_DIR, filename)
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    analyses.append({
+                        "analysis_id": data.get("analysis_id"),
+                        "query": data.get("query", "Unknown query"),
+                        "created_at": data.get("created_at"),
+                        "summary": data.get("summary", {}).get("title", "No title") if data.get("summary") else "No title"
+                    })
+            except Exception:
+                pass
+    
+    # Sort by created_at descending
+    analyses.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+    return analyses
 
 app.include_router(api_router)
 

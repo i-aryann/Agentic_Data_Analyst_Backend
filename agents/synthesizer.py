@@ -1,7 +1,7 @@
 """
-Synthesizer + Visualization Node — LLM-powered (Groq).
-Takes raw execution results and formats them into the exact JSON structure
-expected by the frontend dashboard.
+Synthesizer Node (Phase 2+) — LLM-powered (Groq).
+Focuses ONLY on narrative formatting: summary, insights, and hypothesis validation.
+Chart configurations are now handled by agents/visualizer.py (charts_spec in state).
 """
 import json
 import uuid
@@ -22,7 +22,7 @@ def _get_llm():
     global _llm
     if _llm is None:
         _llm = ChatGroq(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("MODEL_SYNTHESIZER", "llama-3.3-70b-versatile"),
             temperature=0.4,
             api_key=os.getenv("GROQ_API_KEY"),
         )
@@ -59,16 +59,22 @@ def _build_error_response(query: str, error: str) -> dict:
 
 def synthesizer_node(state: dict) -> dict:
     """
-    LLM Call #3: Takes raw execution results and the original context, then
-    formats everything into the frontend-compatible JSON payload.
+    LLM Call #5 (Phase 2): Takes raw execution results and the original context, then
+    formats the narrative portion (summary, insights, hypotheses) into the frontend JSON.
+    Charts are merged in from charts_spec (produced by the Visualizer node).
     """
     query = state["query"]
     execution_result = state.get("execution_result")
     execution_error = state.get("execution_error")
     hypotheses = state.get("hypotheses", [])
     plan = state.get("plan", [])
+    charts_spec = state.get("charts_spec", [])    # Phase 2: from Visualizer
+    critic_feedback = state.get("critic_feedback", "")  # Phase 2: from Critic on refinement loops
 
-    logger.info("📝 [Synthesizer] Formatting results for frontend...")
+    if critic_feedback:
+        logger.info("📝 [Synthesizer] Refinement loop — incorporating critic feedback into narrative...")
+    else:
+        logger.info("📝 [Synthesizer] Formatting narrative for frontend...")
 
     # If both result and error are missing, return error response
     if not execution_result and not execution_error:
@@ -83,6 +89,7 @@ def synthesizer_node(state: dict) -> dict:
         execution_error=execution_error or "",
         hypotheses=hypotheses,
         plan=plan,
+        critic_feedback=critic_feedback,
     )
 
     messages = [
@@ -110,9 +117,18 @@ def synthesizer_node(state: dict) -> dict:
         # Ensure all required top-level keys exist
         parsed.setdefault("summary", None)
         parsed.setdefault("insights", [])
-        parsed.setdefault("charts", [])
         parsed.setdefault("hypotheses", [])
         parsed.setdefault("filters", {})
+
+        # Phase 2: Merge in chart specs from the dedicated Visualizer node.
+        # If the Visualizer produced charts, use them. Otherwise fall back to any
+        # charts the Synthesizer LLM may have produced (backward-compatible).
+        if charts_spec:
+            parsed["charts"] = charts_spec
+            logger.info(f"📝 [Synthesizer] Using {len(charts_spec)} chart(s) from Visualizer.")
+        else:
+            parsed.setdefault("charts", [])
+            logger.info("📝 [Synthesizer] No Visualizer charts — using LLM-generated charts (if any).")
 
         logger.info(
             f"📝 [Synthesizer] Done. "

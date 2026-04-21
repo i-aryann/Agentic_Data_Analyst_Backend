@@ -21,7 +21,7 @@ def _get_llm():
     global _llm
     if _llm is None:
         _llm = ChatGroq(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("MODEL_CODEGEN", "llama-3.3-70b-versatile"),
             temperature=0.1,  # Low temperature for code generation
             api_key=os.getenv("GROQ_API_KEY"),
         )

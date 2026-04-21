@@ -1,36 +1,32 @@
 """
-System and user prompt templates for the Planner + Hypothesis node.
+System and user prompt templates for the Planner node (Phase 2+).
+Responsibility: task decomposition ONLY. Hypothesis generation is handled by hypothesis.py.
 """
 
 PLANNER_SYSTEM_PROMPT = """You are a senior data analyst working inside an autonomous analytical AI system.
-Your job is to receive a user's question about their dataset and produce:
-1. A concrete, step-by-step analysis PLAN (3-6 tasks) that a Python/pandas programmer can execute against the CSV.
-2. A set of HYPOTHESES (3-5) that the analysis should test or explore.
+Your ONLY job is to decompose the user's question into a concrete, step-by-step analysis PLAN.
+Hypothesis generation is handled separately by another agent — do NOT include hypotheses here.
 
 RULES:
-- Each plan step must be specific and actionable (e.g. "Group by Region and sum Revenue" not "Analyze data").
+- Produce 3–6 specific, actionable analysis steps that a Python/pandas programmer can execute.
 - Reference EXACT column names from the dataset profile provided.
-- Hypotheses should be falsifiable data claims, not vague observations.
-- If the user's query is ambiguous, make reasonable assumptions and state them.
+- Each step must describe a concrete operation (e.g. "Group by 'Region' and sum 'Revenue'" not "Analyze data").
+- If the user's query is ambiguous, make reasonable assumptions and state them in a step.
+- If CRITIC FEEDBACK is provided, your new plan MUST address the issues raised.
 - Output ONLY valid JSON. No markdown, no commentary.
 
 OUTPUT FORMAT (strict JSON):
 {
   "plan": [
-    "Step 1 description referencing exact column names",
-    "Step 2 description...",
-    "..."
-  ],
-  "hypotheses": [
-    "H1: Specific falsifiable claim about the data",
-    "H2: Another specific claim...",
+    "Step 1: description referencing exact column names",
+    "Step 2: ...",
     "..."
   ]
 }"""
 
 
-def build_planner_user_prompt(query: str, profile: dict, memory: list) -> str:
-    """Build the user prompt with query, dataset context, and memory."""
+def build_planner_user_prompt(query: str, profile: dict, memory: list, critic_feedback: str = "") -> str:
+    """Build the user prompt. On refinement loops, critic_feedback is non-empty."""
 
     # Format memory as a brief conversation history (last 6 turns max)
     memory_text = "No previous conversation history."
@@ -75,6 +71,16 @@ def build_planner_user_prompt(query: str, profile: dict, memory: list) -> str:
             cat_lines.append(f"  - {col}: {info.get('unique_count', '?')} unique values. Top: {top}")
         cat_text = "\n".join(cat_lines)
 
+    # Critic feedback block (only shown on refinement loops)
+    feedback_block = ""
+    if critic_feedback:
+        feedback_block = f"""
+CRITIC FEEDBACK (from previous attempt — you MUST address these issues):
+{critic_feedback}
+
+Your new plan must specifically fix the issues above. Think carefully before decomposing.
+"""
+
     return f"""USER QUERY: {query}
 
 DATASET PROFILE:
@@ -92,5 +98,5 @@ CATEGORICAL COLUMNS:
 
 CONVERSATION HISTORY:
 {memory_text}
-
-Generate a structured analysis plan and hypotheses for this query. Output ONLY valid JSON."""
+{feedback_block}
+Generate a structured analysis plan. Output ONLY valid JSON with a "plan" key."""

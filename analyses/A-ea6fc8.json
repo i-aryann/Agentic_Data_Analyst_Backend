@@ -1,0 +1,246 @@
+{
+  "summary": {
+    "title": "Car Buying Pattern Change",
+    "description": "The car buying pattern has changed over the years, with the mean selling price increasing from 0.6 to 11.26 between 1992 and 2021. The count of cars sold per year has also increased, with a significant rise from 1 in 1992 to 232 in 2008. The correlation between 'year' and 'selling_price' is 0.3906673599813431, indicating a positive relationship.",
+    "primary_driver": "Increase in selling price",
+    "impact_score": 8.5,
+    "confidence": 90
+  },
+  "insights": [
+    {
+      "id": "I-1",
+      "category": "GROWTH_OPPORTUNITY",
+      "title": "Increasing Selling Price",
+      "description": "The mean selling price has increased from 0.6 to 11.26 between 1992 and 2021, with a correlation of 0.3906673599813431 between 'year' and 'selling_price'. This indicates a positive relationship, with higher prices in later years. For example, the mean selling price in 2010 was 3.684830203106332, while in 2020 it was 9.0804849137931."
+    },
+    {
+      "id": "I-2",
+      "category": "PATTERN_MATCH",
+      "title": "Skewed Distribution of km_driven",
+      "description": "The skewness of 'km_driven' is 23.527991420566035, indicating a highly skewed distribution. This suggests that most cars have lower km_driven values, while a few have much higher values. For instance, the correlation between 'year' and 'km_driven' is -0.31028750446647907, indicating a negative relationship."
+    },
+    {
+      "id": "I-3",
+      "category": "RISK_ALERT",
+      "title": "Contradiction in Fuel Type Preferences",
+      "description": "The mean selling price of diesel cars is 8.234763687391169, while that of petrol cars is 5.028134373771848. However, the correlation between 'year' and 'selling_price' is positive, which might contradict the expectation that diesel cars would have higher prices due to their higher mean selling price. Further investigation is needed to resolve this contradiction."
+    },
+    {
+      "id": "I-4",
+      "category": "GROWTH_OPPORTUNITY",
+      "title": "Increasing Sales Volume",
+      "description": "The count of cars sold per year has increased significantly, from 1 in 1992 to 232 in 2008. This trend is expected to continue, with the count of cars sold per year and fuel type also showing an increasing pattern. For example, the count of cars sold per year and fuel type in 2010 was 47, while in 2020 it was 1274."
+    }
+  ],
+  "charts": [
+    {
+      "id": "C-1",
+      "title": "Mean Selling Price Over the Years",
+      "subtitle": "Mean selling price trend",
+      "chart_type": "line",
+      "data": {
+        "x": [
+          1992,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "y": [
+          0.6,
+          10.0,
+          1.33,
+          0.6365766666666667,
+          0.6445454545454545,
+          1.0809090909090908,
+          0.619998888888889,
+          0.9283333333333333,
+          1.0318181818181817,
+          1.3884615384615384,
+          1.3415254237288137,
+          1.9305581761006283,
+          2.2091116379310347,
+          2.550583791208791,
+          2.9625697674418605,
+          3.684830203106332,
+          4.351431860036832,
+          5.005829567462879,
+          5.641957627118643,
+          6.299272224510812,
+          6.707646331409727,
+          7.354299110595511,
+          8.247859168241963,
+          8.57434631432545,
+          9.566614413680778,
+          9.0804849137931,
+          11.260999999999985
+        ]
+      }
+    },
+    {
+      "id": "C-2",
+      "title": "Count of Cars Sold Per Year",
+      "subtitle": "Sales volume trend",
+      "chart_type": "line",
+      "data": {
+        "x": [
+          1992,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "y": [
+          1,
+          1,
+          1,
+          6,
+          11,
+          11,
+          9,
+          12,
+          22,
+          39,
+          59,
+          159,
+          232,
+          364,
+          430,
+          837,
+          1086,
+          1549,
+          1770,
+          1942,
+          2426,
+          2586,
+          2645,
+          2157,
+          1228,
+          232,
+          5
+        ]
+      }
+    },
+    {
+      "id": "C-3",
+      "title": "Mean Selling Price by Fuel Type",
+      "subtitle": "Comparison of diesel and petrol cars",
+      "chart_type": "bar",
+      "data": {
+        "x": [
+          "Diesel",
+          "Petrol"
+        ],
+        "y": [
+          8.234763687391169,
+          5.028134373771848
+        ]
+      }
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-1",
+      "hypothesis": "Increasing 'year' causes 'selling_price' to increase",
+      "confidence": 90,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The correlation between 'year' and 'selling_price' is 0.3906673599813431, indicating a positive relationship."
+    },
+    {
+      "id": "H-2",
+      "hypothesis": "Cars with 'Diesel' fuel type have significantly higher 'selling_price' than cars with 'Petrol' fuel type",
+      "confidence": 80,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The mean selling price of diesel cars is 8.234763687391169, while that of petrol cars is 5.028134373771848."
+    },
+    {
+      "id": "H-3",
+      "hypothesis": "'km_driven' follows a skewed distribution",
+      "confidence": 95,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The skewness of 'km_driven' is 23.527991420566035, indicating a highly skewed distribution."
+    },
+    {
+      "id": "H-4",
+      "hypothesis": "'selling_price' shows a yearly pattern, with higher prices in later years",
+      "confidence": 85,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The correlation between 'year' and 'selling_price' is 0.3906673599813431, indicating a positive relationship."
+    },
+    {
+      "id": "H-5",
+      "hypothesis": "'age' is negatively correlated with 'max_power'",
+      "confidence": 70,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The correlation between 'age' and 'max_power' is -0.07412411821047248, indicating a negative relationship."
+    }
+  ],
+  "filters": {
+    "categories": [
+      "year",
+      "make",
+      "fuel type"
+    ],
+    "date_ranges": [
+      "1992-2021",
+      "2000-2010"
+    ]
+  },
+  "analysis_id": "A-ea6fc8",
+  "query": "Is there any change in car buying pattern over the years ",
+  "created_at": "2026-04-21T20:15:19.460207+00:00"
+}

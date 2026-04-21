@@ -1,0 +1,184 @@
+{
+  "summary": {
+    "title": "Best Selling Car Companies",
+    "description": "Bentley and Ferrari have the best selling rate among cars, with an average selling price of $20.90. The selling price is positively correlated with max power, with a correlation coefficient of 0.77. The relationship between selling price and power varies across companies, with Toyota and Ford having a correlation coefficient of 0.39 and 0.80, respectively.",
+    "primary_driver": "Max Power",
+    "impact_score": 8.5,
+    "confidence": 90
+  },
+  "insights": [
+    {
+      "id": "I-1",
+      "category": "GROWTH_OPPORTUNITY",
+      "title": "High-Performance Cars Drive Sales",
+      "description": "The top-selling car companies, including Bentley and Ferrari, have an average selling price of $20.90, indicating a strong demand for high-performance vehicles. The correlation between selling price and max power is 0.77, suggesting that increasing max power can lead to higher selling prices. For example, the average max power of the top-selling cars is 81.8, which is higher than the average max power of other cars."
+    },
+    {
+      "id": "I-2",
+      "category": "RISK_ALERT",
+      "title": "Contradictory Relationship Between Selling Price and Engine Capacity",
+      "description": "The correlation between selling price and engine capacity is 0.65, which is lower than the correlation between selling price and max power. This contradictory relationship may indicate that other factors, such as fuel efficiency or brand reputation, play a more significant role in determining selling price. For instance, the average engine capacity of the top-selling cars is 74.0, which is not significantly higher than the average engine capacity of other cars."
+    },
+    {
+      "id": "I-3",
+      "category": "PATTERN_MATCH",
+      "title": "Company-Specific Trends in Selling Price and Max Power",
+      "description": "The relationship between selling price and max power varies across companies. For example, Toyota has a correlation coefficient of 0.39, while Ford has a correlation coefficient of 0.80. This suggests that different companies may have different strategies for pricing their vehicles based on performance characteristics. The average selling price of Toyota cars is $17.18, while the average selling price of Ford cars is $5.86."
+    },
+    {
+      "id": "I-4",
+      "category": "PATTERN_MATCH",
+      "title": "Skewed Distribution of Selling Prices",
+      "description": "The distribution of selling prices is skewed, with a few high-priced cars driving up the average selling price. For example, the average selling price of the top 10% of cars is $20.90, while the average selling price of the bottom 10% of cars is $1.45. This suggests that there may be opportunities for companies to target niche markets with high-end vehicles."
+    }
+  ],
+  "charts": [
+    {
+      "id": "C-1",
+      "title": "Average Selling Price by Company",
+      "subtitle": "Top 10 Companies with Highest Average Selling Price",
+      "chart_type": "bar",
+      "data": {
+        "x": [
+          "BENTLEY",
+          "FERRARI",
+          "LAMBORGHINI",
+          "LEXUS",
+          "MASERATI",
+          "MERCEDES-AMG",
+          "ROLLS-ROYCE",
+          "PORSCHE",
+          "LAND",
+          "JAGUAR"
+        ],
+        "y": [
+          20.90249999999996,
+          20.90249999999996,
+          20.90249999999996,
+          20.90249999999996,
+          20.90249999999996,
+          20.90249999999996,
+          20.90249999999996,
+          20.866399999999963,
+          20.560147058823492,
+          20.187499999999968
+        ]
+      }
+    },
+    {
+      "id": "C-2",
+      "title": "Correlation between Selling Price and Power",
+      "subtitle": "Overall Correlation and Top 5 Companies",
+      "chart_type": "bar",
+      "data": {
+        "x": [
+          "Overall",
+          "FORD",
+          "ISUZU",
+          "HYUNDAI",
+          "CHEVROLET"
+        ],
+        "y": [
+          0.7703898545747933,
+          0.802961001100785,
+          0.7830244045331561,
+          0.691584804835983,
+          0.6107818033394953
+        ]
+      }
+    },
+    {
+      "id": "C-3",
+      "title": "Relationship between Selling Price and Power",
+      "subtitle": "Scatter Plot of Selling Price vs Max Power",
+      "chart_type": "scatter",
+      "data": {
+        "x": [
+          46.3,
+          67.1,
+          67.1,
+          67.04,
+          85.0,
+          88.5,
+          74.0,
+          74.0,
+          83.1,
+          83.14
+        ],
+        "y": [
+          1.4525000000000001,
+          17.177584876543193,
+          20.90249999999996,
+          2.7236206896551725,
+          0.78,
+          3.2051764705882353,
+          11.925,
+          20.90249999999996,
+          17.34901656314698,
+          5.5200000000000005
+        ]
+      }
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-1",
+      "hypothesis": "Increasing 'max_power' causes 'selling_price' to increase",
+      "confidence": 80,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The correlation between selling price and max power is 0.77, indicating a strong positive relationship."
+    },
+    {
+      "id": "H-2",
+      "hypothesis": "Companies with 'make' as 'Toyota' have significantly higher 'selling_price' than companies with 'make' as 'Ford'",
+      "confidence": 60,
+      "status": "Rejected",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The average selling price of Toyota cars is $17.18, while the average selling price of Ford cars is $5.86. However, the difference is not significant enough to support the hypothesis."
+    },
+    {
+      "id": "H-3",
+      "hypothesis": "'selling_price' follows a skewed distribution",
+      "confidence": 90,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The distribution of selling prices is skewed, with a few high-priced cars driving up the average selling price."
+    },
+    {
+      "id": "H-4",
+      "hypothesis": "'selling_price' shows a yearly pattern, with higher prices in later 'year' values",
+      "confidence": 50,
+      "status": "Pending",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The data does not provide enough information to support or reject this hypothesis."
+    },
+    {
+      "id": "H-5",
+      "hypothesis": "'km_driven' is negatively correlated with 'selling_price'",
+      "confidence": 40,
+      "status": "Pending",
+      "agent": "Pandas Executor",
+      "last_update": "Just now",
+      "justification": "The data does not provide enough information to support or reject this hypothesis."
+    }
+  ],
+  "filters": {
+    "categories": [
+      "make",
+      "model",
+      "year"
+    ],
+    "date_ranges": [
+      "2020-2022",
+      "2015-2019"
+    ]
+  },
+  "analysis_id": "A-fae50a",
+  "query": "Which companies have the best selling rate among the cars and does the selling depend upon factors such as power or price?",
+  "created_at": "2026-04-21T20:22:17.911031+00:00"
+}

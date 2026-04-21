@@ -1,0 +1,275 @@
+{
+  "summary": {
+    "title": "Car Buying Patterns",
+    "description": "The average selling price of cars has increased over the years, with a mean of 4.26. The number of unique car makes and models has also increased, with an average of 13.67 and 285.11 per year, respectively. The correlation between year and selling price is 0.39, indicating a positive relationship.",
+    "primary_driver": "Increasing year",
+    "impact_score": 7.5,
+    "confidence": 85
+  },
+  "insights": [
+    {
+      "id": "I-1",
+      "category": "GROWTH_OPPORTUNITY",
+      "title": "Increasing Average Selling Price",
+      "description": "The average selling price of cars has increased over the years, with a mean of 4.26. This trend is expected to continue, with a correlation between year and selling price of 0.39."
+    },
+    {
+      "id": "I-2",
+      "category": "RISK_ALERT",
+      "title": "Decreasing Correlation Between Year and Km Driven",
+      "description": "The correlation between year and km driven is -0.31, indicating a negative relationship. This could be a risk for car manufacturers and sellers, as it may indicate a decrease in car usage over time."
+    },
+    {
+      "id": "I-3",
+      "category": "PATTERN_MATCH",
+      "title": "Shift in Car Buying Patterns Towards Diesel Cars",
+      "description": "The average number of diesel cars per year is 443.77, which is higher than the average number of petrol cars per year, which is 358.11. This indicates a shift in car buying patterns towards diesel cars."
+    },
+    {
+      "id": "I-4",
+      "category": "PATTERN_MATCH",
+      "title": "Positive Correlation Between Engine and Max Power",
+      "description": "The correlation between engine and max power is 0.79, indicating a strong positive relationship. This suggests that cars with more powerful engines tend to have higher max power."
+    }
+  ],
+  "charts": [
+    {
+      "id": "C-1",
+      "title": "Average Selling Price Over Years",
+      "subtitle": "Mean selling price by year",
+      "chart_type": "line",
+      "data": {
+        "x": [
+          1992,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "y": [
+          0.6,
+          10.0,
+          1.33,
+          0.6365766666666667,
+          0.6445454545454545,
+          1.0809090909090908,
+          0.619998888888889,
+          0.9283333333333333,
+          1.0318181818181817,
+          1.3884615384615384,
+          1.3415254237288137,
+          1.9305581761006283,
+          2.2091116379310347,
+          2.550583791208791,
+          2.9625697674418605,
+          3.684830203106332,
+          4.351431860036832,
+          5.005829567462879,
+          5.641957627118643,
+          6.299272224510812,
+          6.707646331409727,
+          7.354299110595511,
+          8.247859168241963,
+          8.57434631432545,
+          9.566614413680778,
+          9.0804849137931,
+          11.260999999999985
+        ]
+      }
+    },
+    {
+      "id": "C-2",
+      "title": "Unique Car Makes and Models Over Years",
+      "subtitle": "Number of unique makes and models by year",
+      "chart_type": "bar",
+      "data": {
+        "x": [
+          1992,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "y": [
+          1,
+          1,
+          1,
+          1,
+          3,
+          4,
+          4,
+          4,
+          6,
+          10,
+          12,
+          14,
+          13,
+          15,
+          16,
+          20,
+          22,
+          25,
+          25,
+          23,
+          24,
+          26,
+          27,
+          24,
+          26,
+          19,
+          3
+        ],
+        "y2": [
+          1,
+          1,
+          1,
+          6,
+          8,
+          10,
+          8,
+          12,
+          17,
+          33,
+          46,
+          100,
+          139,
+          191,
+          221,
+          394,
+          443,
+          557,
+          603,
+          662,
+          814,
+          849,
+          950,
+          827,
+          630,
+          171,
+          4
+        ]
+      }
+    },
+    {
+      "id": "C-3",
+      "title": "Car Buying Patterns by Fuel Type",
+      "subtitle": "Average number of cars by fuel type per year",
+      "chart_type": "bar",
+      "data": {
+        "x": [
+          "Diesel",
+          "Electric",
+          "LPG",
+          "Petrol"
+        ],
+        "y": [
+          443.77272727272725,
+          2.0,
+          5.818181818181818,
+          358.1111111111111
+        ]
+      }
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-1",
+      "hypothesis": "Increasing year causes selling price to increase",
+      "confidence": 80,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now"
+    },
+    {
+      "id": "H-2",
+      "hypothesis": "Cars with diesel fuel type have significantly higher km driven than cars with petrol fuel type",
+      "confidence": 90,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now"
+    },
+    {
+      "id": "H-3",
+      "hypothesis": "Selling price follows a skewed distribution",
+      "confidence": 70,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now"
+    },
+    {
+      "id": "H-4",
+      "hypothesis": "Mileage shows a yearly pattern, with higher values in later years",
+      "confidence": 60,
+      "status": "Pending",
+      "agent": "Pandas Executor",
+      "last_update": "Just now"
+    },
+    {
+      "id": "H-5",
+      "hypothesis": "Engine is positively correlated with max power",
+      "confidence": 95,
+      "status": "Validated",
+      "agent": "Pandas Executor",
+      "last_update": "Just now"
+    }
+  ],
+  "filters": {
+    "regions": [
+      "USA",
+      "Europe",
+      "Asia"
+    ],
+    "date_ranges": [
+      "1990-2000",
+      "2000-2010",
+      "2010-2020"
+    ]
+  },
+  "analysis_id": "A-5cd9a1",
+  "query": "Is there any change in car buying pattern over the years ",
+  "created_at": "2026-04-21T20:06:42.998545+00:00"
+}

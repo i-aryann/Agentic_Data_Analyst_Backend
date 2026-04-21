@@ -3,7 +3,7 @@ cd "e:\Projects\Agentic Data Analyst\Backend"
 uvicorn main:app --port 8001 --reload
 
 Running frontend
-cd "e:\Projects\Agentic Data Analyst\Frontend\Agentic-Data-Analyst-Frontend"
+cd "e:\Projects\Agentic Data Analyst\Frontend\Agentic-Data-Analyst-Frontend\frontend"
 npm run dev
 
 

@@ -1,7 +1,10 @@
 """
-Planner + Hypothesis Generator Node — LLM-powered (Groq).
-Receives the user query, dataset profile, and memory context.
-Produces a structured analysis plan and falsifiable hypotheses.
+Planner Node (Phase 2+) — LLM-powered (Groq).
+Responsibility: task decomposition ONLY.
+Hypothesis generation has been split into agents/hypothesis.py.
+
+On refinement loops, the Critic's feedback is injected via state['critic_feedback']
+so the Planner can produce a better decomposition on the second pass.
 """
 import json
 import logging
@@ -22,7 +25,7 @@ def _get_llm():
     global _llm
     if _llm is None:
         _llm = ChatGroq(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("MODEL_PLANNER", "llama-3.3-70b-versatile"),
             temperature=0.3,
             api_key=os.getenv("GROQ_API_KEY"),
         )
@@ -31,18 +34,27 @@ def _get_llm():
 
 def planner_node(state: dict) -> dict:
     """
-    LLM Call #1: Takes the user query + dataset profile + memory and returns
-    a structured plan (list of tasks) and hypotheses (list of claims to test).
+    LLM Call #1: Decomposes the user query + dataset profile + memory into a
+    structured analysis plan (list of tasks). On refinement loops, critic_feedback
+    from the previous cycle is injected into the prompt.
     """
     query = state["query"]
     profile = state["profile"]
     memory = state.get("memory", [])
+    critic_feedback = state.get("critic_feedback", "")
+    refinement_count = state.get("refinement_count", 0)
 
-    logger.info("🧠 [Planner] Generating analysis plan and hypotheses...")
+    if critic_feedback:
+        logger.info(
+            f"🧠 [Planner] Refinement loop #{refinement_count + 1} — "
+            f"incorporating critic feedback into new plan."
+        )
+    else:
+        logger.info("🧠 [Planner] Generating analysis plan...")
 
     llm = _get_llm()
 
-    user_prompt = build_planner_user_prompt(query, profile, memory)
+    user_prompt = build_planner_user_prompt(query, profile, memory, critic_feedback)
 
     messages = [
         SystemMessage(content=PLANNER_SYSTEM_PROMPT),
@@ -63,17 +75,18 @@ def planner_node(state: dict) -> dict:
 
         parsed = json.loads(raw_text)
         plan = parsed.get("plan", [])
-        hypotheses = parsed.get("hypotheses", [])
+
     except json.JSONDecodeError:
         logger.warning(f"🧠 [Planner] Failed to parse LLM JSON. Raw output:\n{raw_text[:500]}")
-        # Fallback: create a basic plan from the query
         plan = [f"Analyze the dataset to answer: {query}"]
-        hypotheses = [f"The data contains patterns related to: {query}"]
 
-    logger.info(f"🧠 [Planner] Plan has {len(plan)} steps, {len(hypotheses)} hypotheses.")
+    logger.info(f"🧠 [Planner] Plan has {len(plan)} steps.")
     for i, step in enumerate(plan):
         logger.info(f"   📋 Step {i+1}: {step}")
-    for h in hypotheses:
-        logger.info(f"   💡 {h}")
 
-    return {"plan": plan, "hypotheses": hypotheses}
+    # On refinement loops, increment the counter
+    updates = {"plan": plan}
+    if critic_feedback:
+        updates["refinement_count"] = refinement_count + 1
+
+    return updates
